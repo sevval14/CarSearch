@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.image_header {
+  width: 100%;  /* or use a specific value like 100px if you prefer pixels */
+  height: 0%;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  font-weight: bold;
+  padding: 10px;
+  /* İstenen diğer stiller buraya eklenebilir */
+}
+
+input[type="text"] {
+  border-color: #333;
+}
+
+.totalAccount {
+  font-weight: bolder;
+  margin-left: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.addRow label {
+  text-align: center;
+  margin-left: 10px; /* İstediğiniz kadar bir alt boşluk ekleyebilirsiniz */
+}
+
+.addRow  {
+  text-align: center;
+}
