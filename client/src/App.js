@@ -109,8 +109,6 @@ function App() {
                   <th>Car Name</th>
                   <th>Car Year</th>
                   <th>Damage Status</th>
-                  <th>Age</th>
-                  <th>Documents</th>
                 </tr>
               </thead>
               <tbody>
@@ -119,8 +117,6 @@ function App() {
                     <td>{car.carName}</td>
                     <td>{car.carYear}</td>
                     <td>{car.damageStatus}</td>
-                    <td>{/* Age calculation or other logic can be here */}</td>
-                    <td>{/* Information related to documents can be here */}</td>
                   </tr>
                 ))}
               </tbody>
