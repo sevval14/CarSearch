@@ -4,38 +4,111 @@ import { ethers } from 'ethers';
 
 function App() {
   const [carName ,setCarName] = useState("");
-  //const provider = new ethers.BrowserProvider(window.ethereum);
-  const [showTable, setShowTable] = useState(false);
   const [carYear, setCarYear] = useState('');
   const [damageStatus, setDamageStatus] = useState('');
+  const [showTable, setShowTable] = useState(false);
   const [foundCars, setFoundCars] = useState([]);
   const [cars, setCars] = useState([]);
   const [balance, setBalance] = useState('');
   
-  const connectAddress ="0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC";
+  const connectAddress ="0xdD2FD4581271e230360230F9337D5c0430Bf44C0";
+  const ABI =[
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "_carName",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_carYear",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "_damageStatus",
+          "type": "string"
+        }
+      ],
+      "name": "addCar",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "carIndex",
+          "type": "uint256"
+        }
+      ],
+      "name": "getCar",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getCarCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ]
 
+  const provider = useMemo(() => new ethers.BrowserProvider(window.ethereum), []);//Web3Provider versiyon 5
 
-  const provider = useMemo(() => new ethers.BrowserProvider(window.ethereum), []);
-  //const signer = provider.getSigner();
-  //const contract =  new ethers.Contract(connectAddress,ABI,signer);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newCar = {
-      carName: carName,
-      carYear: carYear,
-      damageStatus: damageStatus,
-    };
+    try {
+          // Ethereum cüzdanına bağlan
+    await provider.send("eth_requestAccounts", []);
+    //ether kendi syafasında var metamaskla bağlantı yapmakiçin
+    const signer = await provider.getSigner();
+    console.log(signer);
+    const contract = new ethers.Contract(connectAddress, ABI, signer);
+    
 
-    setFoundCars((prevCars) => [...prevCars, newCar]);
+     const tx = await contract.addCar(carName, carYear, damageStatus);   
+      await tx.wait(); // İşlemin blokzincirinde onaylanmasını bekle
 
-    // Form gönderildikten sonra alanları sıfırla
+    
+    setFoundCars((prevCars) => [...prevCars, { carName, carYear, damageStatus }]);
     setCarName('');
     setCarYear('');
     setDamageStatus('');
-
     setShowTable(true);
+
+    } catch (error) {
+      console.error("An error occurred:", error);
+
+    }
+
   };
 
 
@@ -44,7 +117,8 @@ function App() {
 
     const connectWallet = async () => {
       await provider.send("eth_requestAccounts", []);
-    };
+
+    }
   
     const getBalance = async () => {
       console.log(provider);
@@ -54,17 +128,22 @@ function App() {
       const balancedFormatted = ethers.formatEther(balance);
       setBalance(balancedFormatted);
     };
+
   
     connectWallet().catch(console.error);
     getBalance().catch(console.error);
   
   }, [provider,foundCars]);
 
+
+
+
     return (
       <div>
         <img className="image_header" src={'./assets/CarHeader.jpg'} alt="" />
         <h1>Car Store</h1>
-        <div>
+        <div className="content">
+        <div className="form-container">
           <form onSubmit={handleSubmit} className='addRow'>
             <label>
               Car Name:
@@ -109,8 +188,6 @@ function App() {
                   <th>Car Name</th>
                   <th>Car Year</th>
                   <th>Damage Status</th>
-                  <th>Age</th>
-                  <th>Documents</th>
                 </tr>
               </thead>
               <tbody>
@@ -119,14 +196,13 @@ function App() {
                     <td>{car.carName}</td>
                     <td>{car.carYear}</td>
                     <td>{car.damageStatus}</td>
-                    <td>{/* Age calculation or other logic can be here */}</td>
-                    <td>{/* Information related to documents can be here */}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
         )}
+         </div>
       </div>
     );
   }
