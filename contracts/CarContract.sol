@@ -11,8 +11,8 @@ contract CarContract {
 
     Car[] cars;
 
-    function addCar(string memory _carName, uint256 _carYear, string memory _damageStatus) public {
-    
+    function addCar(string memory _carName, uint256 _carYear, string memory _damageStatus)  payable external {
+
         Car memory newCar = Car({
         
             carName: _carName,
